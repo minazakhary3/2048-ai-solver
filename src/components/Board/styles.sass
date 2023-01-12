@@ -1,0 +1,22 @@
+@use "./../../styles/variables/colors"
+
+.board
+    height: 500px
+    width: 500px
+    background-color: colors.$board-color
+    border-radius: 5px
+    padding: 10px
+    margin: 0 auto
+
+.tiles-grid
+    height: 100%
+    width: 100%
+    padding: 0
+    display: flex
+    flex-direction: column
+    justify-content: space-around
+
+.tiles-row
+    display: flex
+    width: 100%
+    justify-content: space-around
