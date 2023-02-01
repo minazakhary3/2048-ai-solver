@@ -1,9 +1,27 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import "./styles.sass";
 
 type IProps = {
     value: number;
+    animate?: boolean;
+    data: TileData;
 };
+
+type TileState = {
+    row: number;
+    column: number;
+    value: number;
+};
+
+export type TileData = {
+    currentState: TileState;
+    newState?: TileState | null;
+    mergedTile?: {
+        row: number;
+        column: number;
+    } | null;
+} | null;
 
 const colors = {
     0: "#cdc1b4",
@@ -39,17 +57,39 @@ const fontColors = {
     16384: "#f9f6f2",
 };
 
-const EmptyTile = (props: IProps) => {
-    const { value } = props;
+const Tile = (props: IProps) => {
+    const { animate, data } = props;
+    const value = data!.newState?.value
+        ? data!.newState?.value
+        : data!.currentState.value;
     const style = {
         backgroundColor: `${colors[value as keyof typeof colors]}`,
         color: `${fontColors[value as keyof typeof fontColors]}`,
+        zIndex: value,
     };
+
+    const containerStyle = {
+        position: "absolute" as "absolute",
+        left:
+            animate && data!.newState
+                ? data!.newState.column * 125
+                : data!.currentState!.column * 125,
+        top:
+            animate && data!.newState
+                ? data!.newState.row * 125
+                : data!.currentState!.row * 125,
+    };
+
     return (
-        <div className="tile" style={style}>
-            {value > 0 ? value : ""}
+        <div
+            className="tile-container"
+            style={value > 0 ? containerStyle : undefined}
+        >
+            <div className="tile" style={style}>
+                {value > 0 ? value : ""}
+            </div>
         </div>
     );
 };
 
-export default EmptyTile;
+export default Tile;
